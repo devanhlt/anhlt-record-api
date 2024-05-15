@@ -25,7 +25,10 @@ app.post("/upload_audio", upload.single("audio"), (req, res) => {
   const randomFileName = generateRandomFileName() + fileExt;
   const targetPath = path.join(__dirname, "uploads", randomFileName);
 
+  console.log(targetPath);
+
   fs.rename(tempPath, targetPath, (err) => {
+    console.log(err);
     if (err) return res.status(500).send("Error uploading file");
 
     const fileUrl = `http://localhost:3000/uploads/${randomFileName}`;
@@ -42,5 +45,3 @@ app.get("/list_files", (req, res) => {
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
-
-module.exports = app;
