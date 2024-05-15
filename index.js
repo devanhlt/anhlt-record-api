@@ -27,8 +27,7 @@ app.post("/upload_audio", upload.single("audio"), (req, res) => {
 
   fs.rename(tempPath, targetPath, (err) => {
     if (err) return res.status(500).send("Error uploading file");
-    const filePath = path.join(__dirname, "uploads", randomFileName);
-    res.sendFile(filePath);
+    res.send({ fileName: randomFileName });
   });
 });
 
@@ -49,4 +48,8 @@ app.get("/files/:filename", (req, res) => {
 app.get("/list_files", (req, res) => {
   const files = fs.readdirSync(path.join(__dirname, "uploads"));
   res.send(files);
+});
+
+app.listen(3000, () => {
+  console.log("Server is running!");
 });
