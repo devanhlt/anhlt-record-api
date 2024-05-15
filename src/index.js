@@ -12,8 +12,6 @@ app.use(cors());
 
 app.get("/", (req, res) => res.send("Server started!"));
 
-app.listen(3000, () => console.log("Server ready on port 3000."));
-
 // Function to generate a random file name
 const generateRandomFileName = () => {
   const timestamp = new Date().getTime();
