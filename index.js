@@ -25,14 +25,23 @@ app.post("/upload_audio", upload.single("audio"), (req, res) => {
   const randomFileName = generateRandomFileName() + fileExt;
   const targetPath = path.join(__dirname, "uploads", randomFileName);
 
-  console.log(targetPath);
-
   fs.rename(tempPath, targetPath, (err) => {
-    console.log(err);
     if (err) return res.status(500).send("Error uploading file");
+    const filePath = path.join(__dirname, "uploads", randomFileName);
+    res.sendFile(filePath);
+  });
+});
 
-    const fileUrl = `http://localhost:3000/uploads/${randomFileName}`;
-    res.send({ fileUrl });
+// Define a route to serve files based on the filename parameter
+app.get("/files/:filename", (req, res) => {
+  const fileName = req.params.filename;
+  const filePath = path.join(__dirname, "uploads", fileName);
+
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      // Handle any errors that occur while sending the file
+      res.status(500).send("File not found");
+    }
   });
 });
 
@@ -40,8 +49,4 @@ app.post("/upload_audio", upload.single("audio"), (req, res) => {
 app.get("/list_files", (req, res) => {
   const files = fs.readdirSync(path.join(__dirname, "uploads"));
   res.send(files);
-});
-
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
 });
