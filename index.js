@@ -50,6 +50,14 @@ app.get("/list_files", (req, res) => {
   res.send(files);
 });
 
+app.delete("/clear_audios", (req, res) => {
+  const files = fs.readdirSync(path.join(__dirname, "uploads"));
+  for (const file of files) {
+    fs.unlinkSync(path.join(__dirname, "uploads", file));
+  }
+  res.send("deleted");
+});
+
 app.listen(3000, () => {
   console.log("Server is running!");
 });
